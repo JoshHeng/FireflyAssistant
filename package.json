@@ -1,0 +1,33 @@
+{
+  "name": "firefly-assistant",
+  "version": "1.0.0",
+  "description": "An assistant for the Firefly schools platform",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoshHeng/FireflyAssistant.git"
+  },
+  "keywords": [
+    "firefly",
+    "fireflycloud",
+    "schools",
+    "assistant"
+  ],
+  "author": "Josh Heng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JoshHeng/FireflyAssistant/issues"
+  },
+  "homepage": "https://github.com/JoshHeng/FireflyAssistant#readme",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "fast-xml-parser": "^3.17.4",
+    "ical-generator": "^1.15.0",
+    "uuid": "^8.3.0"
+  }
+}
