@@ -1,8 +1,8 @@
-require('dotenv').config();
-
 const express = require('express');
-
+const router = express.Router();
 const ical = require('ical-generator');
+const Firefly = require('../firefly-api.js');
+const UserModel = require('../models/user.js');
 
 function formatEvents(rawEvents) {
 	//Format events, merge doubles and remove unwanted events
@@ -91,23 +91,27 @@ function formatEvents(rawEvents) {
 }
 
 
-async function generateCalendar() {
-	const FireflyApi = require('./firefly-api');
-	const firefly = new FireflyApi(process.env.HOST);
-	firefly.setDeviceId(process.env.DEVICE_ID);
-	firefly.completeAuthentication(process.env.XML);
+async function generateCalendar(user) {
+	const instance = new Firefly(user.host);
+	instance.import(user.firefly);
 
 	let startDate = new Date();
 	startDate.setDate(startDate.getDate() - 14);
 	let endDate = new Date();
 	endDate.setMonth(endDate.getMonth() + 2);
 
-	let events = await firefly.getEvents(startDate, endDate);
+	let events = [];
+	try {
+		events = await instance.getEvents(startDate, endDate);
+	}
+	catch (err) {
+		throw 'Invalid Firefly account. Please authenticate!';
+	}
 
 	const calendar = ical({
 		domain: process.env.DOMAIN,
-		name: `${firefly.user.fullname}'s Firefly Timetable`,
-		url: process.env.DOMAIN + `/ical/${firefly.user.guid}`,
+		name: `${user.name}'s Firefly Timetable`,
+		url: process.env.DOMAIN + `/calendar/ical/${user.calendarId}`,
 		ttl: 86400, //24 hours
 		events: formatEvents(events)
 	});
@@ -115,17 +119,26 @@ async function generateCalendar() {
 	return calendar.toString();
 }
 
-generateCalendar();
+router.get('/ical/:id', async (req, res) => {
+	const { id } = req.params;
+	if (!id) return res.status(404).send('Not found');
 
-const app = express();
+	UserModel.findOne({ calendarId: id }).then(async user => {
+		if (!user) return res.status(404).send('Not found');
+		if (!user.host || !user.firefly) return res.status(403).send('Invalid Firefly account. Please authenticate!');
 
-app.get('/', async (req, res) => {
-	const calendar = await generateCalendar();
-	res.set('Content-Type', 'text/calendar');
-	res.set('Content-Disposition', 'attachment; filename="Firefly Timetable.ics"');
-	return res.send(calendar);
+		let calendar = null;
+		try {
+			calendar = await generateCalendar(user);
+		}
+		catch (err) { return res.status(403).send('Invalid Firefly account. Please authenticate!'); }
+
+		res.set('Content-Type', 'text/calendar');
+		res.set('Content-Disposition', 'attachment; filename="Firefly Timetable.ics"');
+		return res.send(calendar);
+	}).catch(err => {
+		return res.status(404).send('Not found');
+	});
 });
 
-app.listen(3000, () => {
-	console.log('Server listening');
-});
+module.exports = router;

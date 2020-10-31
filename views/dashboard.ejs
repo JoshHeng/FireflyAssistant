@@ -45,4 +45,23 @@
 	</form>
 </div>
 
-</div>
+<% if (user.calendarId) { %>
+	<script>
+		function copyCalendar() {
+			let input = document.getElementById('calendar-url-input');
+			input.select();
+			input.setSelectionRange(0, 9999);
+			document.execCommand('copy');
+		}
+	</script>
+	<div class="ui segment">
+		<h2 class="ui header">Calendar</h2>
+		
+		<div class="ui fluid action input">
+			<input type="text" readonly="" value="<%= process.env.DOMAIN + '/calendar/ical/' + user.calendarId %>" id="calendar-url-input">
+			<button class="ui icon button" onclick="copyCalendar();">
+				<i class="clipboard outline icon"></i>
+			</button>
+		</div>
+	</div>
+<% } %>

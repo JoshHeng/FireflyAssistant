@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { isAuthenticated } = require('../config/auth.js');
+const { v4: uuidv4 } = require('uuid');
 
 const Firefly = require('../firefly-api.js');
 
@@ -44,6 +45,7 @@ router.post('/link', isAuthenticated, async (req, res) => {
 	user.host = schoolUrl,
 	user.school = school,
 	user.firefly = instance.export;
+	user.calendarId = `${uuidv4()}-${uuidv4()}`;
 
 	user.save().then(err => {
 		req.flash('successMessage','Successfully linked');

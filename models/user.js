@@ -31,6 +31,10 @@ const UserSchema = new mongoose.Schema({
 	},
 	firefly: {
 		type: String
+	},
+
+	calendarId: {
+		type: String
 	}
 });
 

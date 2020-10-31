@@ -35,7 +35,8 @@ app.use((req, res, next) => {
 // Express Routing
 app.use('/', require('./routes/index'));
 app.use('/account', require('./routes/account'));
+app.use('/calendar', require('./routes/calendar'));
 
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
 	console.log('Server listening');
 });
