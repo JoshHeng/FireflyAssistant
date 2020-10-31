@@ -1,0 +1,16 @@
+<% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+	<div class="ui negative message">
+		<ul class="list">
+			<%	errors.forEach(function(error) { %>
+				<li><%= error %></li>
+			<% }) %>
+		</ul>
+	</div>
+<% } %>
+<% if (error != '') { %>
+	<div class="ui negative message">
+		<div class="content">
+			<%= error %>
+		</div>
+	</div>
+<% } %>

@@ -1,0 +1,15 @@
+<h1 class="ui header">Dashboard</h1>
+<%- include('./partials/successMessage') %>
+
+<div class="ui segment">
+	<h2 class="ui header">Account - <%= user.id %></h2>
+
+	<a href="/link" class="ui large primary button">Link with Firefly</a>
+
+	<a href="/logout" class="ui button">Logout</a>
+	<form action="/delete" method="POST" style="display: inline;">
+		<button type="submit" class="ui negative button">Delete</button>
+	</form>
+</div>
+
+</div>
