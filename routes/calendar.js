@@ -3,6 +3,7 @@ const router = express.Router();
 const ical = require('ical-generator');
 const Firefly = require('../firefly-api.js');
 const UserModel = require('../models/user.js');
+const crypto = require('crypto');
 
 function formatEvents(rawEvents) {
 	//Format events, merge doubles and remove unwanted events
@@ -93,7 +94,16 @@ function formatEvents(rawEvents) {
 
 async function generateCalendar(user) {
 	const instance = new Firefly(user.host);
-	instance.import(user.firefly);
+
+	//Decrypt firefly export
+	try {
+		let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(process.env.SECRETKEY, 'hex'), Buffer.from(user.firefly.slice(-32), 'hex'));
+		let encrypted = Buffer.from(user.firefly.slice(0, -32), 'hex');
+		let plain = Buffer.concat([decipher.update(encrypted), decipher.final()]).toString();
+		instance.import(plain);
+	}
+	catch (err) { console.error(err); throw 'Invalid Firefly account. Please authenticate!'; }
+	
 
 	let startDate = new Date();
 	startDate.setDate(startDate.getDate() - 14);
