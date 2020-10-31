@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { isAuthenticated } = require('../config/auth.js');
 const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
 
 const Firefly = require('../firefly-api.js');
 
@@ -44,8 +45,12 @@ router.post('/link', isAuthenticated, async (req, res) => {
 	user.fireflyEmail = instance.user.email;
 	user.host = schoolUrl,
 	user.school = school,
-	user.firefly = instance.export;
 	user.calendarId = `${uuidv4()}-${uuidv4()}`;
+
+	//Encrypt firefly export
+	let iv = crypto.randomBytes(16);
+	let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(process.env.SECRETKEY, 'hex'), iv);
+	user.firefly = Buffer.concat([cipher.update(instance.export), cipher.final()]).toString('hex') + iv.toString('hex');
 
 	user.save().then(err => {
 		req.flash('successMessage','Successfully linked');
