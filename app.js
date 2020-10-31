@@ -36,7 +36,8 @@ app.use((req, res, next) => {
 app.use('/', require('./routes/index'));
 app.use('/account', require('./routes/account'));
 app.use('/calendar', require('./routes/calendar'));
+app.use('/assets', express.static('public'));
 
-app.listen(process.env.PORT, () => {
-	console.log('Server listening');
+app.listen(process.env.PORT || 3000, () => {
+	console.log(`Server listening on port ${process.env.PORT || 3000} at ${process.env.DOMAIN}`);
 });

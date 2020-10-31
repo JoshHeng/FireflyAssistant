@@ -4,7 +4,6 @@ Firefly API Driver
 
 */
 const axios = require('axios');
-const { json } = require('express');
 const xml = require('fast-xml-parser');
 const { v4: uuidv4 } = require('uuid');
 
