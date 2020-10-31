@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Firefly Assistant</title>
+		<meta name="description" content="Firefly Assistant is an unofficial service for the Firefly Learning school platform that enables you to convert your timetable into a live iCalendar file">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<meta property="og:title" content="Firefly Assistant">
+		<meta property="og:type" content="Firefly Assistant is an unofficial service for the Firefly Learning school platform that enables you to convert your timetable into a live iCalendar file">
+		<meta property="og:url" content="<%= process.env.DOMAIN %>">
+		<meta property="og:image" content="https://fireflylearning.com/assets/icons/228x228.png">
+
+		<link rel="apple-touch-icon" href="https://fireflylearning.com/assets/icons/228x228.png">
+		<link rel="shortcut icon" href="https://fireflylearning.com/favicon.ico" type="image/x-icon">
+
+		<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.7/dist/semantic.min.css">
+		<script src="https://cdn.jsdelivr.net/npm/fomantic-ui@2.8.7/dist/semantic.min.js"></script>
+
+		<meta name="theme-color" content="#fafafa">
+	</head>
+	<body>
+		<div class="ui menu">
+			<div class="header item" style="padding: 0.4rem 1rem;">
+				<img class="ui mini image" src="https://fireflylearning.com/assets/icons/228x228.png" alt="Firefly logo" style="margin: 0 1rem 0 0;">Firefly Assistant
+			</div>
+		</div>
+		<div class="ui container">
+			<%- body %>
+		</div>
+	</body>
+</html>

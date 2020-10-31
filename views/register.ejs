@@ -1,0 +1,31 @@
+<h1 class="ui header">Register with Firefly Assistant</h1>
+
+<div class="ui warning icon message">
+	<i class="exclamation triangle icon"></i>
+	<div class="content">
+		<div class="header">Warning</div>
+		<p>Using this service will give the service full access to your Firefly account. Unfortunately there is no way to limit the permissions and scope of the service, however access can be revoked and your account can be deleted at any time. <strong>I accept no responsibility for any damage caused by this service.</strong></p>
+	</div>
+</div>
+
+<div class="ui segment">
+	<form class="ui form" action="/register" method="POST">
+		<div class="field">
+			<label>Email</label>
+			<input type="email" name="email" placeholder="Email" autocomplete="email" required>
+		</div>
+	
+		<div class="field">
+			<label>Password</label>
+			<input type="password" name="password" placeholder="Password" autocomplete="new-password" required>
+		</div>
+		<div class="field">
+			<label>Password</label>
+			<input type="password" name="password-confirm" placeholder="Confirm Password" autocomplete="new-password" required>
+		</div>
+	
+		<button class="ui primary button" type="submit">Register</button>
+		<a class="ui negative button" href="/">Cancel</a>
+		<p>Already got an account? <a href="/login">Login</a></p>
+	</form>
+</div>
