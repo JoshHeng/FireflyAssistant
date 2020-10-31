@@ -2,9 +2,12 @@
   "name": "firefly-assistant",
   "version": "1.0.0",
   "description": "An assistant for the Firefly schools platform",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon app.js"
+  },
+  "nodemonConfig": {
+    "ext": "js,ejs"
   },
   "repository": {
     "type": "git",
@@ -24,10 +27,20 @@
   "homepage": "https://github.com/JoshHeng/FireflyAssistant#readme",
   "dependencies": {
     "axios": "^0.20.0",
+    "bcrypt": "^5.0.0",
+    "connect-flash": "^0.1.1",
     "dotenv": "^8.2.0",
+    "ejs": "^3.1.5",
+    "email-validator": "^2.0.4",
     "express": "^4.17.1",
+    "express-ejs-layouts": "^2.5.0",
+    "express-session": "^1.17.1",
     "fast-xml-parser": "^3.17.4",
     "ical-generator": "^1.15.0",
+    "mongoose": "^5.10.11",
+    "nodemon": "^2.0.6",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "uuid": "^8.3.0"
   }
 }

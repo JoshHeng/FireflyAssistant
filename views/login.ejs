@@ -1,0 +1,22 @@
+<h1 class="ui header">Login to Firefly Assistant</h1>
+
+<div class="ui segment">
+	<form class="ui form" action="/login" method="POST">
+		<%- include('./partials/successMessage') %>
+		<%- include('./partials/errorMessages') %>
+
+		<div class="field">
+			<label>Email</label>
+			<input type="email" name="email" placeholder="Email" autocomplete="email" required>
+		</div>
+	
+		<div class="field">
+			<label>Password</label>
+			<input type="password" name="password" placeholder="Password" autocomplete="current-password" required>
+		</div>
+	
+		<button class="ui primary button" type="submit">Login</button>
+		<a class="ui negative button" href="/">Cancel</a>
+		<p>Not got an account? <a href="/register">Register</a></p>
+	</form>
+</div>

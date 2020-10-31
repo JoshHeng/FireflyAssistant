@@ -1,0 +1,126 @@
+<h1 class="ui header">Link Firefly Account</h1>
+<%- include('../partials/successMessage') %>
+
+<script>
+	function checkSchoolCode() {
+		function error(error) {
+			document.getElementById('code-input').value = '';
+			document.getElementById('code-error-message').innerText = error;
+			document.getElementById('code-error').classList.remove('hidden');
+			document.getElementById('code-form').classList.remove('loading');
+		}
+
+		let code = document.getElementById('code-input').value;
+
+		document.getElementById('code-form').classList.add('loading');
+		document.getElementById('code-error').classList.add('hidden');
+
+		fetch('/account/link/code?code=' + encodeURIComponent(code)).then(res => {
+			res.json().then(res => {
+				if (!res.success) {
+					return error(res.error || 'An error occured. Please try again later');
+				}
+
+				document.getElementById('authenticate-code').value = code;
+				document.getElementById('authenticate-school').value = res.name;
+				document.getElementById('authenticate-school-url').value = res.url;
+				document.getElementById('authenticate-token-anchor').href = res.tokenUrl;
+				document.getElementById('authenticate-device-id').value = res.deviceId;
+				document.getElementById('code-form').classList.remove('loading');
+				document.getElementById('code-segment').classList.add('hidden');
+				document.getElementById('code-step').classList.remove('active');
+				document.getElementById('authenticate-segment').classList.remove('hidden');
+				document.getElementById('authenticate-instructions').classList.remove('hidden');
+				document.getElementById('authenticate-step').classList.add('active');
+			}).catch(() => {
+				return error('An error occured. Please try again later');
+			});
+		}).catch(() => {
+			return error('An error occured. Please try again later');
+		});
+	}
+</script>
+
+<div class="ui warning icon message">
+	<i class="exclamation triangle icon"></i>
+	<div class="content">
+		<div class="header">Warning</div>
+		<p>Using this service will give the service full access to your Firefly account. Unfortunately there is no way to limit the permissions and scope of the service, however access can be revoked and your account can be deleted at any time. <strong>I accept no responsibility for any damage caused by this service.</strong></p>
+	</div>
+</div>
+
+<div class="ui two top attached steps">
+	<div class="active step" id="code-step">
+		<i class="school icon"></i>
+		<div class="content">
+			<div class="title">Find School</div>
+			<div class="description">Find your school using your school code</div>
+		</div>
+	</div>
+	<div class="step" id="authenticate-step">
+		<i class="lock icon"></i>
+		<div class="content">
+			<div class="title">Authenticate</div>
+			<div class="description">Authenticate with Firefly and link it to Firefly Assistant</div>
+		</div>
+	</div>
+</div>
+<div class="ui attached segment" id="code-segment">
+	<form class="ui form" onsubmit="checkSchoolCode(); return false;" id="code-form">
+		<div class="ui negative message hidden" id="code-error">
+			<div class="content" id="code-error-message"></div>
+		</div>
+		<div class="field">
+			<label>School Code</label>
+			<input type="text" placeholder="School Code" id="code-input" required value="<%= typeof code != 'undefined' ? code : '' %>">
+		</div>
+		<button type="submit" class="ui large primary button">Find</button>
+	</form>
+</div>
+<div class="ui attached segment hidden" id="authenticate-segment">
+	<%- include('../partials/errorMessages') %>
+
+	<form class="ui form" action="/account/link" method="POST">
+		<input type="hidden" id="authenticate-device-id" name="deviceId" />
+		<input type="hidden" id="authenticate-code" name="code" />
+
+		<div class="field">
+			<label>School</label>
+			<input type="text" readonly="" name="school" placeholder="School" id="authenticate-school" required>
+		</div>
+		<div class="field">
+			<label>School URL</label>
+			<input type="text" readonly="" name="schoolUrl" placeholder="School URL" id="authenticate-school-url" required>
+		</div>
+
+		<div class="field">
+			<label>Authentication Response</label>
+			<p>Click the button below, login to Firefly and copy and paste the response here</p>
+			<a class="ui black button" style="display: block; margin: 1rem 0;" href="" target="_blank" rel="noopener" id="authenticate-token-anchor">Authenticate</a>
+			<textarea rows="15" name="authenticationResponse" required minlength=40></textarea>
+		</div>
+
+		<button type="submit" class="ui large primary button">Link</button>
+	</form>
+</div>
+
+<div class="ui segment hidden" id="authenticate-instructions">
+	<h2 class="ui header">Authenticating with Firefly</h2>
+	To link your account with Firefly, you'll need to click the Authenticate button and login. You should then be given a response in an XML format, which you'll need to copy and paste into the Authentication Response field.
+
+	<h3 class="ui header">Google Chrome</h3>
+	<img class="ui large image" src="/authentication-chrome.png" alt="A screenshot of authentication on Google Chrome">
+	The response should look like this - just copy and paste everything
+
+	<h3 class="ui header">Firefox</h3>
+	<img class="ui large image" src="/authentication-firefox.png" alt="A screenshot of authentication on Firefox">
+	Open the inspector by pressing CTRL+SHIFT+I or right clicking and pressing 'Inspect Element'
+	<br>Then right click on the first line (starting with token) and go to Copy -> Outer HTML
+
+	<h3 class="ui header">Other Browsers</h3>
+	The steps should be similar to Google Chrome and Firefox. If you're still having trouble, email me at <a href="mailto:support@joshheng.co.uk" target="_blank" rel="noopener">support@joshheng.co.uk</a>
+</div>
+
+<% if (typeof code != 'undefined') { %>
+	<script>checkSchoolCode()</script>
+<% } %>
