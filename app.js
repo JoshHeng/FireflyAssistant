@@ -28,12 +28,13 @@ app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
 	res.locals.successMessage = req.flash('successMessage');
-	res.locals.error  = req.flash('error');
+	res.locals.error = req.flash('error');
 	next();
 });
 
 // Express Routing
 app.use('/', require('./routes/index'));
+app.use('/account', require('./routes/account'));
 
 app.listen(3000, () => {
 	console.log('Server listening');

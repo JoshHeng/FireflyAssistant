@@ -12,6 +12,25 @@ const UserSchema = new mongoose.Schema({
 	createdAt: {
 		type: Date,
 		default: Date.now
+	},
+
+	name: {
+		type: String
+	},
+	username: {
+		type: String
+	},
+	fireflyEmail: {
+		type: String
+	},
+	host: {
+		type: String
+	},
+	school: {
+		type: String
+	},
+	firefly: {
+		type: String
 	}
 });
 

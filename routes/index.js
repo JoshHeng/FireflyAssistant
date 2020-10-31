@@ -48,9 +48,7 @@ router.post('/register', (req, res) => {
 
 	if (errors.length > 0) return res.render('register', {
 		errors: errors,
-		email: email,
-		password: password,
-		passwordConfirm: passwordConfirm
+		email: email
 	});
 
 	User.findOne({ email: email }).exec((err, user) => {
@@ -59,9 +57,7 @@ router.post('/register', (req, res) => {
 
 			return res.render('register', {
 				errors: errors,
-				email: email,
-				password: password,
-				passwordConfirm: passwordConfirm
+				email: email
 			});
 		}
 
